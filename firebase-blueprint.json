@@ -1,0 +1,84 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A player in Hunter Blue",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "email": { "type": "string" },
+        "level": { "type": "number" },
+        "xp": { "type": "number" },
+        "criptoBlue": { "type": "number" },
+        "currentClassId": { "type": "string" },
+        "unlockedClasses": { "type": "array", "items": { "type": "string" } },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "hp": { "type": "number" },
+            "attack": { "type": "number" },
+            "defense": { "type": "number" },
+            "speed": { "type": "number" }
+          }
+        },
+        "inventory": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "pvpWins": { "type": "number" },
+        "pvpLosses": { "type": "number" },
+        "missionsCompleted": { "type": "number" },
+        "isOnline": { "type": "boolean" },
+        "lastLogin": { "type": "string", "format": "date-time" },
+        "lastDaily": { "type": "string", "format": "date-time" },
+        "dailyStreak": { "type": "number" }
+      },
+      "required": ["uid", "displayName", "level", "xp", "criptoBlue", "currentClassId", "isOnline"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A chat message",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "authorName": { "type": "string" },
+        "type": { "type": "string", "enum": ["user", "system", "combat", "gacha"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["text", "authorUid", "authorName", "type", "timestamp"]
+    },
+    "PvPBattle": {
+      "title": "PvPBattle",
+      "description": "A PvP battle request or active battle",
+      "type": "object",
+      "properties": {
+        "challengerUid": { "type": "string" },
+        "challengerName": { "type": "string" },
+        "defenderUid": { "type": "string" },
+        "defenderName": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined", "finished"] },
+        "winnerUid": { "type": "string" },
+        "log": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["challengerUid", "defenderUid", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Players"
+    },
+    "/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Global chat messages"
+    },
+    "/pvp_battles/{battleId}": {
+      "schema": { "$ref": "#/entities/PvPBattle" },
+      "description": "PvP Battles"
+    }
+  }
+}
